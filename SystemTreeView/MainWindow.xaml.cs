@@ -62,7 +62,6 @@ namespace SystemTreeView
             {
                 if (sender is TreeViewItem item && item.DataContext is Node nodeItem && nodeItem.Nodes.Count == 1 && nodeItem.Nodes[0] == null)
                 {
-                    //var nodeItem = (item.DataContext as Node);
                     nodeItem.Nodes.Clear();
                     foreach (string s in Directory.GetDirectories(nodeItem.Tag))
                     {
@@ -84,11 +83,9 @@ namespace SystemTreeView
                             Header = s.Substring(s.LastIndexOf(@"\") + 1),
                             Tag = s,
                             Icon = "file " + s,
-                            //ImgSc = ImageSourceFromIcon(System.Drawing.Icon.ExtractAssociatedIcon(s)),
                             Nodes = new ObservableCollection<Node>() { }
                         };
                         
-                        //Task.Run( () => newItem.ImgSc = ImageSourceFromIcon(System.Drawing.Icon.ExtractAssociatedIcon(s)) );
                         nodeItem.Nodes.Add(newItem);
                     }
                 }
