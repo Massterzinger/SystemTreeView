@@ -33,12 +33,16 @@ namespace SystemTreeView
     public partial class MainWindow : Window
     {
         public ObservableCollection<Node> Nodes;
+        private ImageSource folderimg;
 
         public MainWindow()
         {
             InitializeComponent();
             Nodes = new ObservableCollection<Node>();
             foldersTree.ItemsSource = Nodes;
+
+            Uri uri = new Uri("pack://application:,,,/Images/folder.png");
+            folderimg = new BitmapImage(uri);
         }
 
         private void FoldersTree_Loaded(object sender, RoutedEventArgs e)
@@ -69,8 +73,24 @@ namespace SystemTreeView
                         {
                             Header = s.Substring(s.LastIndexOf(@"\") + 1),
                             Tag = s,
+                            ImgSc = folderimg,
                             Nodes = new ObservableCollection<Node>() { null }
+                            
                         };
+                        nodeItem.Nodes.Add(newItem);
+                    }
+
+                    foreach (string s in Directory.GetFiles(nodeItem.Tag))
+                    {
+                        Node newItem = new Node
+                        {
+                            Header = s.Substring(s.LastIndexOf(@"\") + 1),
+                            Tag = s,
+                            ImgSc = ImageSourceFromIcon(System.Drawing.Icon.ExtractAssociatedIcon(s)),
+                            Nodes = new ObservableCollection<Node>() { }
+                        };
+                        
+                        //Task.Run( () => newItem.ImgSc = ImageSourceFromIcon(System.Drawing.Icon.ExtractAssociatedIcon(s)) );
                         nodeItem.Nodes.Add(newItem);
                     }
                 }
@@ -78,6 +98,19 @@ namespace SystemTreeView
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        public ImageSource ImageSourceFromIcon(System.Drawing.Icon ico)
+        {
+            ImageSource imageSource;
+
+            using (System.Drawing.Bitmap bmp = ico.ToBitmap())
+            {
+                var stream = new MemoryStream();
+                bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                imageSource = BitmapFrame.Create(stream);
+                return imageSource;
             }
         }
 

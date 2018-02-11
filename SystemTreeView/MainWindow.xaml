@@ -16,7 +16,7 @@
             <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}">
                 <StackPanel Orientation="Horizontal">
                     <Image Name="img"  Width="20" Height="20" Stretch="Fill" 
-                                       Source="{Binding Path=ImageSource, Mode=OneTime}"/>
+                                       Source="{Binding ImgSc, Mode=OneTime}"/>
                     <TextBlock Text="{Binding Header}" />
                 </StackPanel>
             </HierarchicalDataTemplate>
