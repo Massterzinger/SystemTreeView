@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:SystemTreeView"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <local:IconToImageConverter x:Key="converter" />
+    </Window.Resources>
     <TreeView x:Name="foldersTree" Loaded="FoldersTree_Loaded">
         <TreeView.Resources>
             <Style TargetType="{x:Type TreeViewItem}">
@@ -16,7 +19,9 @@
             <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}">
                 <StackPanel Orientation="Horizontal">
                     <Image Name="img"  Width="20" Height="20" Stretch="Fill" 
-                                       Source="{Binding ImgSc, Mode=OneTime}"/>
+                                       Source="{Binding
+                                       Path=Icon, IsAsync=True,
+                                       Converter={StaticResource converter}}"/>
                     <TextBlock Text="{Binding Header}" />
                 </StackPanel>
             </HierarchicalDataTemplate>

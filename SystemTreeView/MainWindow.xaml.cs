@@ -26,23 +26,19 @@ namespace SystemTreeView
     {
         public string Header { get; set; }
         public string Tag { get; set; }
-        public ImageSource ImgSc { get; set; }
+        public string Icon { get; set; }
         public ObservableCollection<Node> Nodes { get; set; }
     }
 
     public partial class MainWindow : Window
     {
         public ObservableCollection<Node> Nodes;
-        private ImageSource folderimg;
 
         public MainWindow()
         {
             InitializeComponent();
             Nodes = new ObservableCollection<Node>();
             foldersTree.ItemsSource = Nodes;
-
-            Uri uri = new Uri("pack://application:,,,/Images/folder.png");
-            folderimg = new BitmapImage(uri);
         }
 
         private void FoldersTree_Loaded(object sender, RoutedEventArgs e)
@@ -53,6 +49,7 @@ namespace SystemTreeView
                 {
                     Header = s,
                     Tag = s,
+                    Icon = "drive",
                     Nodes = new ObservableCollection<Node>() { null}
                 };
                 Nodes.Add(item);
@@ -73,7 +70,7 @@ namespace SystemTreeView
                         {
                             Header = s.Substring(s.LastIndexOf(@"\") + 1),
                             Tag = s,
-                            ImgSc = folderimg,
+                            Icon = "folder",
                             Nodes = new ObservableCollection<Node>() { null }
                             
                         };
@@ -86,7 +83,8 @@ namespace SystemTreeView
                         {
                             Header = s.Substring(s.LastIndexOf(@"\") + 1),
                             Tag = s,
-                            ImgSc = ImageSourceFromIcon(System.Drawing.Icon.ExtractAssociatedIcon(s)),
+                            Icon = "file " + s,
+                            //ImgSc = ImageSourceFromIcon(System.Drawing.Icon.ExtractAssociatedIcon(s)),
                             Nodes = new ObservableCollection<Node>() { }
                         };
                         

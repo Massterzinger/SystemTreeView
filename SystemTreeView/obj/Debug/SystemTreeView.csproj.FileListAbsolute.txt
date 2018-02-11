@@ -13,3 +13,4 @@ D:\Workspace\VS\WPF\SystemTreeView\SystemTreeView\obj\Debug\SystemTreeView.cspro
 D:\Workspace\VS\WPF\SystemTreeView\SystemTreeView\obj\Debug\SystemTreeView.csproj.CoreCompileInputs.cache
 D:\Workspace\VS\WPF\SystemTreeView\SystemTreeView\obj\Debug\SystemTreeView.exe
 D:\Workspace\VS\WPF\SystemTreeView\SystemTreeView\obj\Debug\SystemTreeView.pdb
+D:\Workspace\VS\WPF\SystemTreeView\SystemTreeView\obj\Debug\GeneratedInternalTypeHelper.g.cs
