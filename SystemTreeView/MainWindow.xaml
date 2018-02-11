@@ -7,5 +7,19 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <TreeView x:Name="foldersTree" Loaded="FoldersTree_Loaded">
+        <TreeView.Resources>
+            <Style TargetType="{x:Type TreeViewItem}">
+                <EventSetter Event="Expanded" Handler="Folder_Expanded"/>
+            </Style>
+        </TreeView.Resources>
+        <TreeView.ItemTemplate>
+            <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Name="img"  Width="20" Height="20" Stretch="Fill" 
+                                       Source="{Binding Path=ImageSource, Mode=OneTime}"/>
+                    <TextBlock Text="{Binding Header}" />
+                </StackPanel>
+            </HierarchicalDataTemplate>
+        </TreeView.ItemTemplate>
     </TreeView>
 </Window>

@@ -13,78 +13,71 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
 
 namespace SystemTreeView
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
+    /// 
+
+    public class Node //ViewModel
+    {
+        public string Header { get; set; }
+        public string Tag { get; set; }
+        public ImageSource ImgSc { get; set; }
+        public ObservableCollection<Node> Nodes { get; set; }
+    }
+
     public partial class MainWindow : Window
     {
-        private object dummyNode = null;
+        public ObservableCollection<Node> Nodes;
 
         public MainWindow()
         {
             InitializeComponent();
+            Nodes = new ObservableCollection<Node>();
+            foldersTree.ItemsSource = Nodes;
         }
 
         private void FoldersTree_Loaded(object sender, RoutedEventArgs e)
         {
             foreach (string s in Directory.GetLogicalDrives())
             {
-                TreeViewItem item = new TreeViewItem();
-                item.Header = s;
-                item.Tag = s;
-                item.FontWeight = FontWeights.Normal;
-                item.Items.Add(dummyNode);
-                item.Expanded += new RoutedEventHandler(folder_Expanded);
-                foldersTree.Items.Add(item);
+                Node item = new Node
+                {
+                    Header = s,
+                    Tag = s,
+                    Nodes = new ObservableCollection<Node>() { null}
+                };
+                Nodes.Add(item);
             }
         }
 
-        void folder_Expanded(object sender, RoutedEventArgs e)
+        void Folder_Expanded(object sender, RoutedEventArgs e)
         {
-            if (sender is TreeViewItem item && item.Items.Count == 1 && item.Items[0] == null) //Check if folder wasn`t opened yet
+            try
             {
-                item.Items.Clear(); //Not very good solution
-
-                try
+                if (sender is TreeViewItem item && item.DataContext is Node nodeItem && nodeItem.Nodes.Count == 1 && nodeItem.Nodes[0] == null)
                 {
-                    
-                    foreach (string s in Directory.GetDirectories(item.Tag.ToString()))
+                    //var nodeItem = (item.DataContext as Node);
+                    nodeItem.Nodes.Clear();
+                    foreach (string s in Directory.GetDirectories(nodeItem.Tag))
                     {
-                        TreeViewItem subItem = new TreeViewItem
+                        Node newItem = new Node
                         {
-                            Header = s.Substring(s.LastIndexOf("\\")+1),
+                            Header = s.Substring(s.LastIndexOf(@"\") + 1),
                             Tag = s,
-                            FontWeight = FontWeights.Normal,
+                            Nodes = new ObservableCollection<Node>() { null }
                         };
-                        subItem.Items.Add(dummyNode); 
-                        subItem.Expanded += new RoutedEventHandler(folder_Expanded);
-                        subItem.MouseRightButtonUp += SubItem_MouseRightButtonUp;
-                        
-                        item.Items.Add(subItem);
-                    }
-                    foreach (string s in Directory.GetFiles(item.Tag.ToString()))
-                    {
-                        var Ico = System.Drawing.Icon.ExtractAssociatedIcon(s);
-                        TreeViewItem subItem = new TreeViewItem
-                        {
-                            Header = s.Substring(s.LastIndexOf("\\") + 1),
-                            Tag = s,
-                            FontWeight = FontWeights.Bold,
-                            
-                        };
-                        
-                        subItem.MouseRightButtonUp += SubItem_MouseRightButtonUp;
-                        item.Items.Add(subItem);
+                        nodeItem.Nodes.Add(newItem);
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
